@@ -1,5 +1,6 @@
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { StatusType } from "../../types/BoardTypes";
+import { API } from "../../utils/api";
 import Task from "./Task";
 
 type changeStatus =  (type: "title" | "description" | "is_complete_status" | "order", stat: StatusType, value: any) => Promise<void>
@@ -12,7 +13,8 @@ export default function Status (
         tasks : any,
         addTask : any,
         setTasks : any,
-        deleteStatus : any
+        deleteStatus : any,
+        board : number
     }
     ){
     const tasks = props.tasks;
@@ -21,6 +23,20 @@ export default function Status (
     const deleteStatus = props.deleteStatus;
     const stat = props.status;
     const changeStatus = props.changeStatus;
+
+    const deleteTask = async (taskID : number) => {
+        if(tasks){
+            if(window.confirm("Are you sure you would like to delete this task?")){
+                setTasks(tasks.filter((t : any)=>t.id !== taskID));
+                changeStatus("order",stat,stat.order.filter(t=>t !== taskID));
+                const del = await API.task.delete(props.board, taskID);
+                if(del){
+                    console.log('Task Deleted');
+                }
+            }
+        }
+    } 
+
     return (
         <Draggable key = {props.index} draggableId={`${props.index}`} index={props.index}>
             {(provided)=>(
@@ -53,14 +69,14 @@ export default function Status (
                             <i className="far fa-circle-plus"></i>
                         </button>
                     </div>
-                    <Droppable droppableId="task_board" type="row" >
+                    <Droppable droppableId={"task_board_"+stat.id} type="row" >
                         {(provided) => (
                             <ul {...provided.droppableProps} ref={provided.innerRef} className="flex flex-col gap-4 min-h-[50px] transition">
                                 {
                                     stat.order?.map((tID, i)=>{
                                         
-                                        const task = tasks?.filter((t : any) => t.id === tID);
-                                        return tasks ? <Task task ={task} index = {i} setTasks={setTasks} tasks = {tasks} key={i} /> : "hehje"
+                                        const task = tasks?.filter((t : any) => t.id === tID)[0];
+                                        return task ? <Task task ={task} index = {i} setTasks={setTasks} tasks = {tasks} key={i} deleteTask = {deleteTask} /> : ""
                                     })
                                 }
                                 {provided.placeholder}

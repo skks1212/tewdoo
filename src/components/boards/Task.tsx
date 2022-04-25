@@ -3,23 +3,15 @@ import { API } from "../../utils/api";
 
 
 
-export default function Task(props : {task : any, index : number, setTasks : any, tasks : any}){
+export default function Task(props : {task : any, index : number, setTasks : any, tasks : any, deleteTask : any}){
     const task = props.task;
     const setTasks = props.setTasks;
     const tasks = props.tasks;
-
-    const deleteTask = async (taskID : number) => {
-        if(window.confirm("Are you sure you would like to delete this task?")){
-            setTasks(tasks.filter((t : any)=>t.id !== taskID));
-            const del = await API.task.delete(task.board_object.id, taskID);
-            if(del){
-                console.log('Task Deleted');
-            }
-        }
-    } 
+    const deleteTask = props.deleteTask;
+    
 
     return (
-        <Draggable key = {props.index} draggableId={`task_${task.id}`} index={props.index}>
+        <Draggable key = {props.index} draggableId={`${task.status_object.id}_task_${props.index}`} index={props.index}>
             {(provided) => (
                 <li 
                     key={props.index} 

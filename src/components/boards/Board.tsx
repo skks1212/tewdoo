@@ -189,6 +189,8 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
         setSaveStatus('');
     }
 
+    
+
     const deleteStatus = async (stat : StatusType) => {
         if(prevStatuses && statuses && board){
             if(window.confirm("Are you sure you would like to delete this state?")){
@@ -209,18 +211,66 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
 
     const reorderStatus = (result : DropResult) => {
         console.log(result);
-        if(board && result.type !== 'row'){
-            const dropSource = result.source.index ;
-            const dropDestination = result.destination?.index;
-            let oState = board?.meta.order;
-            [ oState[dropDestination?dropDestination:0],  oState[dropSource]] = [ oState[dropSource],  oState[dropDestination?dropDestination:0]];
-            setBoard({
-                ...board,
-                meta : {
-                    ...board.meta,
-                    order : oState
+        if(board){
+            if(result.type === 'column'){
+                const dropSource = result.source.index ;
+                const dropDestination = result.destination?.index;
+                let oState = board?.meta.order;
+                [ oState[dropDestination?dropDestination:0],  oState[dropSource]] = [ oState[dropSource],  oState[dropDestination?dropDestination:0]];
+                setBoard({
+                    ...board,
+                    meta : {
+                        ...board.meta,
+                        order : oState
+                    }
+                })
+            }else if(result.type === 'row'){
+                const source = {
+                    stat_id : parseInt(result.source.droppableId.split("_")[2]),
+                    index : result.source.index
                 }
-            })
+                const drop = result.destination ? {
+                    stat_id : parseInt(result.destination.droppableId.split("_")[2]),
+                    index : result.destination.index
+                } : null;
+
+                
+                if(drop && statuses && tasks){
+                    //if in same column
+                    if(source.stat_id === drop.stat_id){
+                        const stat = statuses.filter(s=>s.id === source.stat_id)[0];
+                        let oState = stat.order;
+                        [ oState[drop.index],  oState[source.index]] = [ oState[source.index],  oState[drop.index]];
+                        changeStatus("order",stat,oState);
+                    }else{
+                        const sStat = statuses.filter(s=>s.id === source.stat_id)[0];
+                        const dStat = statuses.filter(s=>s.id === drop.stat_id)[0];
+                        const sOrder = sStat.order.filter(o=>o !== sStat.order[source.index]);
+                        const dOrder = dStat.order ? [...dStat.order.slice(0,drop.index), sStat.order[source.index], ...dStat.order.slice(drop.index)] : [sStat.order[source.index]];
+                        
+                        //console.log(sStat.order, dStat.order);
+                        console.log(sOrder, dOrder);
+                        const taskID = sStat.order[source.index];
+                        setTasks(tasks.map(ta=>{
+                            if(ta.id === taskID){
+                                return {
+                                    ...ta,
+                                    status_object : {
+                                        ...ta.status_object,
+                                        id : drop.stat_id
+                                    },
+                                    status : drop.stat_id
+                                };
+                            }else{
+                                return ta;
+                            }
+                        }))
+                        changeStatus("order",sStat,sOrder);
+                        changeStatus("order",dStat,dOrder);
+                    }
+                }
+                
+            }
         }
         
     }
@@ -367,6 +417,7 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
                                                 addTask = {addTask} 
                                                 setTasks = {setTasks} 
                                                 deleteStatus = {deleteStatus} 
+                                                board = {props.boardID}
                                             />
                                         );
                                     })
