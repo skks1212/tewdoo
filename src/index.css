@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.lazy-load{
+  position: relative;
+  overflow: hidden;
+}
+.lazy-load::before {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  left: -100px;
+  top: 0;
+  height: 100%;
+  width: 100px;
+  background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.59) 50%, transparent 100%);
+  transition: 0.4s;
+  animation: lazyload 1s infinite cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+@keyframes lazyload {
+  from {
+      left: -100px;
+  }
+  to   {
+      left: 100%;
+  }
+}
+.panel-button{
+  position: relative;
+  overflow: hidden;
+}
+.panel-button::after{
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: calc(50% - 10px);
+  width: 20px;
+  height: 3px;
+  background: blueviolet;
+  transition: 0.2s;
+  border-radius: 2px;
+}
+.panel-selected::after{
+  bottom: 0px;
+}
+.active-sidebar-link{
+  background: rgba(137, 43, 226, 0.091) !important;
+  color: blueviolet;
+}
+.active-sidebar-link::after{
+  content:'';
+  position: absolute;
+  left: 0px;
+  top: calc(50% - 5px);
+  width: 3px;
+  height: 10px;
+  border-radius: 2px;
+  background: blueviolet;
+}
+
+/* Customize the label (the container) */
+.container {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 10px;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: blueviolet;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 10px;
+  top: 6px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
