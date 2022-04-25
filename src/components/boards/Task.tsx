@@ -26,39 +26,20 @@ export default function Task(props : {task : any, index : number, setTasks : any
                     ref={provided.innerRef} 
                     {...provided.draggableProps} 
                     {...provided.dragHandleProps} 
-                    className="border-2 border-gray-100 rounded-xl p-3 bg-white"
+                    className="border-2 mx-4 my-2 border-gray-100 rounded-xl p-3 bg-white"
                     tabIndex={0}
                 >
-                    <input 
-                        type="text"
-                        placeholder="Task Name"
-                        className="bg-transparent w-full border-b-2 font-bold text-2xl border-b-gray-100 outline-none focus:border-b-violet-600"
-                        value={task.title}
-                        onChange={(e)=>setTasks(
-                            tasks.map((t : any, i : number)=>{
-                                if(t.id === task.id){
-                                    return {
-                                        ...t,
-                                        title : e.target.value
-                                    }
-                                }else{
-                                    return t;
-                                }
-                            })
-                        )}
-                    />
-                    <br/>
-                    <span className="text-gray-500">
+                    <span className="">
                         <textarea
-                            placeholder="Task Description"
-                            className="bg-transparent w-full resize-none outline-none border-b-2 border-b-transparent focus:border-b-violet-600"
-                            value={task.description}
+                            placeholder="Task"
+                            className="bg-transparent w-full resize-none text-2xl font-bold outline-none border-b-2 border-b-transparent focus:border-b-violet-600"
+                            value={task.title}
                             onChange={(e)=>setTasks(
                                 tasks.map((t : any, i : number)=>{
                                     if(t.id === task.id){
                                         return {
                                             ...t,
-                                            description : e.target.value
+                                            title : e.target.value
                                         }
                                     }else{
                                         return t;

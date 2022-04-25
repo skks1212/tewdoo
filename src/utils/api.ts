@@ -63,7 +63,7 @@ export const API = {
     status : {
         create : (create : {title : string, description : string, is_complete_status : boolean}, board : number) => request(`boards/${board}/status/`,"POST", create),
         list : (boardID : number) => request(`boards/${boardID}/status/`),
-        save : (boardID : number, statusID : number, save : {title : string, description : string, is_complete_status : boolean}) => request(`boards/${boardID}/status/${statusID}/`,"PATCH", save),
+        save : (boardID : number, statusID : number, save : {title : string, description : string, is_complete_status : boolean, order : number[]}) => request(`boards/${boardID}/status/${statusID}/`,"PATCH", save),
         delete : (stat : StatusType) => request(`boards/${stat.board}/status/${stat.id}/`,"DELETE")
     },
     task : {

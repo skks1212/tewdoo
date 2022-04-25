@@ -123,14 +123,13 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
                 }
                 setStatuses(sortedStatuses);
                 setPrevStatuses(sortedStatuses);
-                
             }
         }else{
             console.log('board not setup',board);
         }
     }
 
-    const changeStatus = async (type : "title" | "description" | "is_complete_status" , stat : StatusType, value : string | boolean, ) => {
+    const changeStatus = async (type : "title" | "description" | "is_complete_status" | "order" , stat : StatusType, value : any, ) => {
         if(statuses){
             setStatuses(statuses.map((s, i)=>{
                 if(s.id === stat.id){
@@ -150,6 +149,12 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
                                 ...s,
                                 is_complete_status : typeof value === "boolean" ? value : false
                             }
+                        case "order" : 
+                            console.log(value);
+                            return {
+                                ...s,
+                                order : value
+                            }
                         default:
                             return s;
                     }
@@ -165,7 +170,7 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
             statuses.forEach(async (s) => {
                 if( s != prevStatuses.filter(fs=>fs.id === s.id)[0]){
                     setSaveStatus('Saving...');
-                    const patch = await API.status.save(props.boardID, s.id, {title: s.title, description : s.description, is_complete_status:s.is_complete_status});
+                    const patch = await API.status.save(props.boardID, s.id, {title: s.title, description : s.description, is_complete_status:s.is_complete_status, order : s.order});
                     if(patch){
                         //console.log('Saved', patch);
                         setSaveStatus('');

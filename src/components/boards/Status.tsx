@@ -2,7 +2,7 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import { StatusType } from "../../types/BoardTypes";
 import Task from "./Task";
 
-type changeStatus =  (type: "title" | "description" | "is_complete_status", stat: StatusType, value: string | boolean) => Promise<void>
+type changeStatus =  (type: "title" | "description" | "is_complete_status" | "order", stat: StatusType, value: any) => Promise<void>
 
 export default function Status (
     props : {
@@ -37,35 +37,36 @@ export default function Status (
                         />
                         <button
                             title="Add Task"
-                            onClick={()=>addTask(stat,(posted : any)=>{
-                                if(tasks){
-                                    setTasks([
-                                        ...tasks,
-                                        posted
-                                    ])
-                                }
-                            })}
+                            onClick={()=>{
+                                addTask(stat,(posted : any)=>{
+                                    if(tasks){
+                                        changeStatus("order",stat,(stat.order ? [...stat.order, posted.id] : [posted.id]))
+                                        setTasks([
+                                            ...tasks,
+                                            posted
+                                        ])
+                                    }
+                                })
+                            }}
                             className="hover:text-violet-600"
                         >
                             <i className="far fa-circle-plus"></i>
                         </button>
                     </div>
-                    <div className="p-4 ">
                     <Droppable droppableId="task_board" type="row" >
                         {(provided) => (
-                            <ul {...provided.droppableProps} ref={provided.innerRef} className="flex flex-col gap-4">
+                            <ul {...provided.droppableProps} ref={provided.innerRef} className="flex flex-col gap-4 min-h-[50px] transition">
                                 {
-                                    tasks?.filter((t : any) =>t.status_object.id === stat.id).map((task : any, i : number)=>{
-                                        return (
-                                            <Task task ={task} index = {i} setTasks={setTasks} tasks = {tasks} key={i} />
-                                        )
+                                    stat.order?.map((tID, i)=>{
+                                        
+                                        const task = tasks?.filter((t : any) => t.id === tID);
+                                        return tasks ? <Task task ={task} index = {i} setTasks={setTasks} tasks = {tasks} key={i} /> : "hehje"
                                     })
                                 }
                                 {provided.placeholder}
                             </ul>
                         )}
                     </Droppable>
-                    </div>
                     <div className="border-t-2 border-t-gray-100 p-4 flex justify-between items-center">
                         <button
                             className="text-sm"
