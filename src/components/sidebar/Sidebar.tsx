@@ -27,11 +27,16 @@ const links : NavButton[] = [
         icon : "chalkboard",
         name : "Boards"
     },
-    {
+    /*{
         location : "/todo",
         icon : "list",
         name : "Todo"
-    }
+    },*/
+    {
+        location : "/about",
+        icon : "info-circle",
+        name : "About"
+    },
 ]
 
 export default function SideBar(){

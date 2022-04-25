@@ -69,6 +69,7 @@ export const API = {
     task : {
         create : (status : StatusType, params : {title : string, description : string, status : number}) => request(`boards/${status.board}/tasks/`, "POST", params),
         load : (boardID : number) => request(`boards/${boardID}/tasks/`),
-        save : (boardID : number, taskID : number, payload : {title : string, description : string, status : number}) => request(`boards/${boardID}/tasks/${taskID}/`, "PATCH", payload)
+        save : (boardID : number, taskID : number, payload : {title : string, description : string, status : number}) => request(`boards/${boardID}/tasks/${taskID}/`, "PATCH", payload),
+        delete : (boardID : number, taskID : number) => request(`boards/${boardID}/tasks/${taskID}/`, "DELETE")
     }
 }

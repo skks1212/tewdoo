@@ -4,15 +4,22 @@ export default function About() {
 
     return (
         <div>
-            <h1 className="text-5xl font-bold" tabIndex={0}>
-                About Formify
-            </h1>
             <br/>
-            <p tabIndex={0}>
-                Formify helps you to create forms as quick as someone can fill them in.
+            <div className="py-6 px-20">
+                <h1 className="font-bold text-3xl">
+                    About TewDoo
+                </h1>
                 <br/>
-                Made with ❤️ by <a href="https://shivank.writeroo.in/" title="Shivank Kacker Website">Shivank Kacker</a>
-            </p>
+                <p tabIndex={0}>
+                    TewDoo is a Kanban style task management app, made for GDC and Pupilfirst's WD 301 course's capstone project.
+                    <br/>
+                    Gotta say, I love react and typescript. 😌
+                    <br/>
+                    <br/>
+                    Made with ❤️ by <a href="https://shivank.writeroo.in/" title="Shivank Kacker Website">Shivank Kacker</a>
+                </p>
+            </div>
+            
         </div>
     );
 }
