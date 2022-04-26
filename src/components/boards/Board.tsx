@@ -11,6 +11,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautif
 import { addTask, loadTasks } from "../../actions/TaskActions";
 import Task from "./Task";
 import Status from "./Status";
+import Confetti from 'react-dom-confetti'
 
 
 
@@ -30,6 +31,7 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
     const [prevStatuses, setPrevStatuses] = useState<StatusType[] | null>(null);
     const [tasks, setTasks] = useState<TaskType[] | null>(null);
     const [prevTasks, setPrevTasks] = useState<TaskType[] | null>(null);
+    const [confettiStat, setConfettiState] = useState(false);
 
     const loadBoard = async () => {
         const get = await API.boards.getBoard(props.boardID);
@@ -129,7 +131,7 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
         }
     }
 
-    const changeStatus = async (type : "title" | "description" | "is_complete_status" | "order" , stat : StatusType, value : any, ) => {
+    const changeStatus = async (type : "title" | "description" | "is_complete_status" | "order" , stat : StatusType, value : any, callback? : any) => {
         if(statuses){
             setStatuses(statuses.map((s, i)=>{
                 if(s.id === stat.id){
@@ -151,6 +153,7 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
                             }
                         case "order" : 
                             console.log(value);
+                            callback?.();
                             return {
                                 ...s,
                                 order : value
@@ -161,6 +164,7 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
                 }
                 return s;
             }))
+            
         }
     }
 
@@ -248,7 +252,7 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
                         const sOrder = sStat.order.filter(o=>o !== sStat.order[source.index]);
                         const dOrder = dStat.order ? [...dStat.order.slice(0,drop.index), sStat.order[source.index], ...dStat.order.slice(drop.index)] : [sStat.order[source.index]];
                         
-                        //console.log(sStat.order, dStat.order);
+                        console.log(sStat.order, dStat.order);
                         console.log(sOrder, dOrder);
                         const taskID = sStat.order[source.index];
                         setTasks(tasks.map(ta=>{
@@ -265,12 +269,38 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
                                 return ta;
                             }
                         }))
-                        changeStatus("order",sStat,sOrder);
-                        changeStatus("order",dStat,dOrder);
+                        changeStatOrder(sStat.id, dStat.id, sOrder, dOrder);
+
+                        if(dStat.is_complete_status){
+                            setConfettiState(true);
+                            setTimeout(() => {
+                                setConfettiState(false);
+                            }, 2000);
+                        }
                     }
                 }
                 
             }
+        }
+        
+    }
+
+    const changeStatOrder = (stat1 : number, stat2 : number, order1 : number[], order2 : number[]) => {
+        if(statuses){
+            setStatuses(statuses.map((stat)=>{
+                if(stat.id === stat1){
+                    return {
+                        ...stat,
+                        order : order1
+                    }
+                }else if(stat.id === stat2){
+                    return {
+                        ...stat,
+                        order : order2
+                    }
+                }
+                return stat;
+            }))
         }
         
     }
@@ -336,7 +366,13 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
     },[tasks]);
 
     return (
-        <>
+        <>  
+            <div className="absolute left-[50%] top-8">
+                <Confetti
+                    active={confettiStat}
+                />
+            </div>
+            
             <br/>
             {
                 CFModal ? (

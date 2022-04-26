@@ -18,7 +18,7 @@ export default function Task(props : {task : any, index : number, setTasks : any
                     ref={provided.innerRef} 
                     {...provided.draggableProps} 
                     {...provided.dragHandleProps} 
-                    className="border-2 mx-4 my-2 border-gray-100 rounded-xl p-3 bg-white"
+                    className="border-2 border-gray-100 rounded-xl p-3 bg-white"
                     tabIndex={0}
                 >
                     <span className="">

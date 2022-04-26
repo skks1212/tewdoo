@@ -71,7 +71,7 @@ export default function Status (
                     </div>
                     <Droppable droppableId={"task_board_"+stat.id} type="row" >
                         {(provided) => (
-                            <ul {...provided.droppableProps} ref={provided.innerRef} className="flex flex-col gap-4 min-h-[50px] transition">
+                            <ul {...provided.droppableProps} ref={provided.innerRef} className="flex flex-col p-4 gap-4 min-h-[50px] transition">
                                 {
                                     stat.order?.map((tID, i)=>{
                                         
