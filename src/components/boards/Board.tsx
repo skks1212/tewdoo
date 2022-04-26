@@ -367,7 +367,7 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
 
     return (
         <>  
-            <div className="absolute left-[50%] top-8">
+            <div className="absolute left-[50%] top-0">
                 <Confetti
                     active={confettiStat}
                 />
@@ -376,7 +376,7 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
             <br/>
             {
                 CFModal ? (
-                    <Modal title="New State" closeCB={setCFModal} actionCB={()=>createStatusAPI()} actionName="Create">
+                    <Modal title="New Stage" closeCB={setCFModal} actionCB={()=>createStatusAPI()} actionName="Create">
                         <form>
                             <input type="text" placeholder="Title" className={commonStyles.inputStyling + " w-full"} onChange={e=>setCreateStatus({...createStatus, title : e.target.value})}/>
                         </form>
@@ -414,7 +414,7 @@ export default function BoardElement(props : {boardID : number, localEnv : Local
                         className="bg-violet-600 hover:bg-violet-700 transition rounded-xl py-2 px-4 text-white"
                         onClick={()=>setCFModal(true)}
                     >
-                        <i className="fa-regular fa-clipboard-list-check"></i> &nbsp;Add State
+                        <i className="fa-regular fa-columns"></i> &nbsp;Add Stage
                     </button>
                     <button 
                         className="hover:text-red-600 ml-4"

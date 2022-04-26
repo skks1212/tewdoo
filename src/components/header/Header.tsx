@@ -12,7 +12,7 @@ export default function Header(props: {localEnv: LocalEnv}) {
         <header className="flex justify-between items-center border-b-2 border-b-gray-100 backdrop-blur bg-white/40 z-20 fixed inset-x-0 top-0 px-4">
             <div className="flex items-center justify-center p-4">
                 <div className="text-xl mr-2 text-violet-600">
-                    <i className="fa-duotone fa-calendar"></i>
+                    <i className="fad fa-square-poll-horizontal rotate-90"></i>
                 </div>
                 <div className="text-xl font-bold">
                     TewDoo
